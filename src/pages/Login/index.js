@@ -1,50 +1,81 @@
 
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Image,TouchableOpacity, ScrollView} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { getAuth, signInWithEmailAndPassword  } from "firebase/auth";
+
+
+
 
 
 function Login({ navigation }){
-    return(
-      <KeyboardAvoidingView style={styles.background}>
-        
-      <View style={styles.logo}>
-        <Image style={styles.Image}
-        source={require('./img/logo.jpeg')}
-        />
-      </View>
-  
-      <View style={styles.login}>
-        <View>
-        </View> 
-        <TextInput 
-        style={styles.input2}
-        placeholder='email'
-        autoCorrect={false}
-        onChangeText={()=> {}}/>
-  
-        <TextInput 
-        style={styles.input}
-        placeholder='senha'
-        autoCorrect={false}
-        secureTextEntry
-        onChangeText={()=> {}}/>
 
-        <TouchableOpacity style={styles.textsenha}>
-          <Text>Esqueceu a senha</Text>
-        </TouchableOpacity>
-  
-        <TouchableOpacity style={styles.bnt}
-                onPress={() => navigation.navigate('Home')}
-        >
-          <Text style={styles.btnTexto}>Acessar</Text>
-  
-        </TouchableOpacity>
-  
-        
-        
-      </View>
-    </KeyboardAvoidingView>
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const login = ()=>{
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    navigation.navigate('Home')
+    // ...
+  })
+  .catch((error) => {
+    console.log(error);
+        alert('Ops parece que deu algum erro.');
+        return;
+    // ..
+  });
+ 
+    setEmail('');
+    setPassword('');
+  }
+
+  return(
+    <KeyboardAvoidingView style={styles.background}>
+      
+    <View style={styles.logo}>
+      <Image style={styles.Image}
+      source={require('./img/logo.jpeg')}
+      />
+    </View>
+
+    <View style={styles.login}>
+      <View>
+      </View> 
+      <TextInput 
+      style={styles.input2}
+      placeholder='email'
+      autoCorrect={false}
+      value={email}
+      onChangeText={(texto) => setEmail(texto)}/>
+
+      <TextInput 
+      style={styles.input}
+      placeholder='senha'
+      value={password}
+      autoCorrect={false}
+      secureTextEntry
+      onChangeText={(texto) => setPassword(texto)}/>
+
+      <TouchableOpacity style={styles.textsenha}>
+        <Text>Esqueceu a senha</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.bnt}
+              onPress={login}
+      >
+        <Text style={styles.btnTexto}>Acessar</Text>
+
+      </TouchableOpacity>
+
+      
+      
+    </View>
+  </KeyboardAvoidingView>
     );
   }
 

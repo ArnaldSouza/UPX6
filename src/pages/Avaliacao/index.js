@@ -1,59 +1,58 @@
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Image,TouchableOpacity, ScrollView} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import app from '../../config';
-import { doc, setDoc, getFirestore, updateDoc, addDoc, useFirestore, collection   } from "firebase/firestore";
+import { doc, setDoc, getFirestore, collection, Timestamp, addDoc  } from "firebase/firestore"; 
+import { useNavigation } from '@react-navigation/native';
+import DatePicker from "react-datepicker";
 import { TextInputMask } from 'react-native-masked-text'
 
 
 
-function NovaMedida({ navigation }){
+
+function Avaliacao({  }){
+
+  const navigation = useNavigation();
 
   const [nome, setNome] = useState('');
-  const [motivo, setMotivo] = useState('');
   const [data, setData] = useState('');
-  const [medida, setMedida] = useState('');
-  const [descricao, setDescricao] = useState('');
+  const [turma, setTurma] = useState('');
+  const [Nivel, setNivel] = useState('');
+  const [Empresa, setEmpresa] = useState('');
 
-  
+
 
   async function cadastrar(){
-
+    
     const db = getFirestore(app);
-
-    const med = {
-      motivo: motivo,
+    const Av  = {
       data: data,
-      medida: medida,
-      descricao: descricao
+      turma: turma,
+      Nivel: Nivel,
+      Empresa: Empresa
     }
 
-  const cad = addDoc(collection(db, "Usuarios", nome, "Medidas"), med)
+    const cad = await addDoc(collection(db, "Usuarios", nome, "Avaliacao"), Av);
+    const id = cad.id;
 
+    navigation.navigate('Avaliacao2', {
+        nome,
+        id
+      });
 
-  
-  console.log(med)
 
   }
-  
+
   return(
+
     <KeyboardAvoidingView style={styles.HomeScreen}>
 
       <View style={styles.input}>
       <TextInput 
               style={styles.inputText}
-              placeholder='Nome do colaboarador'
+              placeholder='Nome Completo'
               autoCorrect={false}
               value={nome}
               onChangeText={(texto) => setNome(texto)}/>
-      </View>
-
-      <View style={styles.input}>
-      <TextInput 
-              style={styles.inputText}
-              placeholder='Motivo'
-              autoCorrect={false}
-              value={motivo}
-              onChangeText={(texto) => setMotivo(texto)}/>
       </View>
 
       <View style={styles.input}>
@@ -72,34 +71,41 @@ function NovaMedida({ navigation }){
       <View style={styles.input}>
           <TextInput 
               style={styles.inputText}
-              placeholder='Medida'
+              placeholder='turma'
               autoCorrect={false}
-              value={medida}
-              onChangeText={(texto) => setMedida(texto)}/>
+              value={turma}
+              keyboardType="numeric"
+              onChangeText={(texto) => setTurma(texto)}/>
       </View>
 
-      <View style={styles.inputdes}>
+      <View style={styles.input}>
           <TextInput 
               style={styles.inputText}
-              placeholder='Descricao'
+              placeholder='Nivel'
               autoCorrect={false}
-              value={descricao}
-              onChangeText={(texto) => setDescricao(texto)}/>
+              value={Nivel}
+              onChangeText={(texto) => setNivel(texto)}/>
       </View>
 
-
-
+      <View style={styles.input}>
+          <TextInput 
+              style={styles.inputText}
+              placeholder='Empresa'
+              autoCorrect={false}
+              value={Empresa}
+              onChangeText={(texto) => setEmpresa(texto)}/>
+      </View>
       
 
       <TouchableOpacity style={styles.btn} onPress={cadastrar}>
-        <Text style={styles.btnTexto}>Enviar</Text>
+        <Text style={styles.btnTexto}>Proximo</Text>
       </TouchableOpacity>
 
   </KeyboardAvoidingView>
-    );
+  );
   }
 
-  export default NovaMedida;
+  export default Avaliacao;
 
   const styles = StyleSheet.create({
     HomeScreen:{
@@ -122,21 +128,14 @@ function NovaMedida({ navigation }){
         marginStart: '5%',
       },
 
-      inputdes:{
-        height: '24.28%',
-        width: '76.8%',
-        borderStyle: 'solid',
-        borderWidth: 1,
-      },
-
       btn:{
-        width: '55%',
+        width: '39%',
         height: '7%',
         alignItems: 'center',
         justifyContent: 'space-evenly',
         backgroundColor: '#99CC6A',
+        alignSelf: 'flex-end',
         marginEnd: '6%',
-        borderRadius: 30
       },
 
       btnTexto:{

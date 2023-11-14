@@ -1,109 +1,87 @@
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Image,TouchableOpacity, ScrollView} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import app from '../../config';
-import { doc, setDoc, getFirestore, collection, Timestamp  } from "firebase/firestore"; 
+import { doc, setDoc, getFirestore, collection, updateDoc  } from "firebase/firestore"; 
 import { useNavigation } from '@react-navigation/native';
-import { TextInputMask } from 'react-native-masked-text'
-import DatePicker from "react-datepicker";
 
 
+function EdiCad3({ route }){
 
-function Cadastro({  }){
+  const [Empresa, setEmpresa] = useState('');
+  const [Função, setFunção] = useState('');
+  const [Polo, setPolo] = useState('');
+  const [Instrutor, setInstrutor] = useState('');
+  const [Adimissao, setAdimissao] = useState('');
 
-  
-
+  const { id } = route.params;
   const navigation = useNavigation();
-
-  const [nome, setNome] = useState('');
-  const [data, setData] = useState('');
-  const [cpf, setCpf] = useState('');
-  const [rg, setRg] = useState('');
-  const [Telefone, setTelefone] = useState('');
-
 
 
   async function cadastrar(){
-
     
     const db = getFirestore(app);
     const usuarios = {
-      nome: nome,
-      data: data,
-      cpf: cpf,
-      rg: rg,
-      Telefone: Telefone
+      Empresa: Empresa,
+      Função: Função,
+      Polo: Polo,
+      Instrutor: Instrutor,
+      Adimissao: Adimissao
     }
 
-    const cad = setDoc(doc(db, "Usuarios", nome), usuarios,)
+    const cad = updateDoc(doc(db, "Usuarios", id), usuarios)
+    const volta = navigation.navigate('Pesquisa');
+    console.log(id)
 
-    navigation.navigate('Cad2', {
-      nome
-    });
 
 
   }
 
   return(
-
     <KeyboardAvoidingView style={styles.HomeScreen}>
 
       <View style={styles.input}>
       <TextInput 
               style={styles.inputText}
-              placeholder='Nome Completo'
+              placeholder='Empresa'
+              value={Empresa}
               autoCorrect={false}
-              value={nome}
-              onChangeText={(texto) => setNome(texto)}/>
-      </View>
+              onChangeText={(texto) => setEmpresa(texto)}/>
+              </View>
 
       <View style={styles.input}>
-      <TextInputMask
-      type={'datetime'}
-      options={{
-        format: 'DD/MM/YYYY'
-      }} 
-        style={styles.inputText}
-        placeholder='DD/MM/YYYY'
-        autoCorrect={false}
-        value={data}
-        onChangeText={(texto) => setData(texto)}/>
-      </View>
-
-      <View style={styles.input}>
-          <TextInputMask 
+      <TextInput 
               style={styles.inputText}
-              type='cpf'
-              placeholder='CPF'
+              placeholder='Função'
+              value={Função}
               autoCorrect={false}
-              value={cpf}
-              keyboardType="numeric"
-              onChangeText={(texto) => setCpf(texto)}/>
-      </View>
+              onChangeText={(texto) => setFunção(texto)}/>
+              </View>
 
       <View style={styles.input}>
           <TextInput 
               style={styles.inputText}
-              placeholder='RG'
+              placeholder='Polo'
+              value={Polo}
               autoCorrect={false}
-              value={rg}
-              keyboardType="numeric"
-              onChangeText={(texto) => setRg(texto)}/>
-      </View>
+              onChangeText={(texto) => setPolo(texto)}/>
+              </View>
 
       <View style={styles.input}>
-          <TextInputMask 
+          <TextInput 
               style={styles.inputText}
-              type={'cel-phone'}
-              options={{
-                maskType: 'BRL',
-                withDDD: true,
-                dddMask: '(99) '
-              }}
-              placeholder='Telefone'
+              placeholder='Instrutor'
+              value={Instrutor}
               autoCorrect={false}
-              value={Telefone}
-              keyboardType="numeric"
-              onChangeText={(texto) => setTelefone(texto)}/>
+              onChangeText={(texto) => setInstrutor(texto)}/>
+              </View>
+
+      <View style={styles.input}>
+          <TextInput 
+              style={styles.inputText}
+              placeholder='Adimissao'
+              value={Adimissao}
+              autoCorrect={false}
+              onChangeText={(texto) => setAdimissao(texto)}/>
       </View>
       
 
@@ -112,10 +90,10 @@ function Cadastro({  }){
       </TouchableOpacity>
 
   </KeyboardAvoidingView>
-  );
+    );
   }
 
-  export default Cadastro;
+  export default EdiCad3;
 
   const styles = StyleSheet.create({
     HomeScreen:{

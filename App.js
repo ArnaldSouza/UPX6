@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Image,TouchableOpacity} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import {getFirestore, collection, getDocs, doc} from 'firebase/firestore'
+import firebase from './src/config.js'
 
 import Home from './src/pages/Home';
 import Login from './src/pages/Login';
@@ -16,13 +17,20 @@ import ConsultaMedida from './src/pages/Consultar medida';
 import Atendimento from './src/pages/Atendimento';
 import NovoAtendimento from './src/pages/NovoAtendimento';
 import ConsultaAtendimento from './src/pages/ConsultaAtendimento';
+import EdiCad1 from './src/pages/EdiCad1/index.js';
+import EdiCad2 from './src/pages/EdiCad2/index.js';
+import EdiCad3 from './src/pages/EdiCad3/index.js';
+import Desenvolvimento from './src/pages/Desenvolvimento/index.js';
+import Presenca from './src/pages/presenca/index.js';
+import Avaliacao from './src/pages/Avaliacao/index.js';
+import Avaliacao2 from './src/pages/Avaliacao2/index.js';
 
 const Stack = createStackNavigator();
 
-export default function App() {
+  export default function App() {   
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Pesquisa">
         <Stack.Screen name="Login" component={Login}/>
         <Stack.Screen name="Home"  component={Home}/>
         <Stack.Screen name="Setor"  component={SetorSocial}/>
@@ -37,6 +45,13 @@ export default function App() {
         <Stack.Screen name="Atendimento" component={Atendimento}/>
         <Stack.Screen name="NovoAtendimento" component={NovoAtendimento}/>
         <Stack.Screen name="ConsultaAtendimento" component={ConsultaAtendimento}/>
+        <Stack.Screen name="EdiCad1" component={EdiCad1}/>
+        <Stack.Screen name="EdiCad2" component={EdiCad2}/>
+        <Stack.Screen name="EdiCad3" component={EdiCad3}/>
+        <Stack.Screen name="Desenvolvimento" component={Desenvolvimento}/>
+        <Stack.Screen name="Presenca" component={Presenca}/>
+        <Stack.Screen name="Avaliacao" component={Avaliacao}/>
+        <Stack.Screen name="Avaliacao2" component={Avaliacao2}/>
       </Stack.Navigator> 
     </NavigationContainer>
   );

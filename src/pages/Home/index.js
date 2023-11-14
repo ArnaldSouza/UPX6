@@ -17,15 +17,15 @@ function Home() {
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.card, styles.cardElevad]} onPress={() => navigation.navigate('Setor')}>
-          <Image source={{ uri: 'https://img.freepik.com/fotos-gratis/mao-usando-laptop-com-tela-virtual-e-documento-para-aprovacao-on-line-de-garantia-de-qualidade-sem-papel-e-conceito-de-gerenciamento-de-erp_616485-61.jpg?size=626&ext=jpg&ga=GA1.1.1413502914.1696982400&semt=sph'}} 
+          <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo9yYuaNMRyzOA7xB1vGW_PxdQmakBZ7HS8g&usqp=CAU'}} 
           style={styles.cardImage}/>
           <View style={styles.cardFooter}>
             <Text style={styles.btnTexto}>Setor Social</Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.card, styles.cardElevad]}>
-          <Image source={{ uri: 'https://img.freepik.com/fotos-gratis/mao-usando-laptop-com-tela-virtual-e-documento-para-aprovacao-on-line-de-garantia-de-qualidade-sem-papel-e-conceito-de-gerenciamento-de-erp_616485-61.jpg?size=626&ext=jpg&ga=GA1.1.1413502914.1696982400&semt=sph'}} 
+        <TouchableOpacity style={[styles.card, styles.cardElevad]} onPress={() => navigation.navigate('Desenvolvimento')}>
+          <Image source={{ uri: 'https://i0.wp.com/blog.portaleducacao.com.br/wp-content/uploads/2022/07/Desenvolvimento-humano-%E2%80%93-psicologia-e-aspectos.jpg'}} 
           style={styles.cardImage}/>
           <View style={styles.cardFooter}>
             <Text style={styles.btnTexto}>Desenvolvimento</Text>
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
 
   card:{
-    width: 351,
+    width: 331,
     height: 234,
     borderRadius: 22
   },
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
 
   cardFooter:{
     backgroundColor: '#314FBA',
-    height: 76,
+    height: 56,
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomLeftRadius: 20,

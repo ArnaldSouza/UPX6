@@ -1,45 +1,45 @@
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Image,TouchableOpacity, ScrollView} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import app from '../../config';
-import { doc, setDoc, getFirestore, collection, Timestamp  } from "firebase/firestore"; 
+import { doc, setDoc, getFirestore, collection, Timestamp , updateDoc } from "firebase/firestore"; 
 import { useNavigation } from '@react-navigation/native';
-import { TextInputMask } from 'react-native-masked-text'
-import DatePicker from "react-datepicker";
 
 
 
-function Cadastro({  }){
 
-  
+function Avaliacao2({ route }){
 
   const navigation = useNavigation();
 
-  const [nome, setNome] = useState('');
-  const [data, setData] = useState('');
-  const [cpf, setCpf] = useState('');
-  const [rg, setRg] = useState('');
-  const [Telefone, setTelefone] = useState('');
+  const [HabilidadeTecnica, setHabilidadeTecnica] = useState('');
+  const [Metas, setMetas] = useState('');
+  const [Participacao, setParticipacao] = useState('');
+  const [RelacionamentoInterpessoal, setRelacionamentoInterpessoal] = useState('');
+
+  const { nome, id } = route.params;
 
 
 
-  async function cadastrar(){
+  async function cadastrar(  ){
 
     
+    
     const db = getFirestore(app);
-    const usuarios = {
-      nome: nome,
-      data: data,
-      cpf: cpf,
-      rg: rg,
-      Telefone: Telefone
+    const Av  = {
+        HabilidadeTecnica: HabilidadeTecnica,
+        Metas: Metas,
+        Participacao: Participacao,
+        RelacionamentoInterpessoal: RelacionamentoInterpessoal
     }
 
-    const cad = setDoc(doc(db, "Usuarios", nome), usuarios,)
+    const cad = updateDoc(doc(db, "Usuarios", nome, "Avaliacao", id), Av);
 
-    navigation.navigate('Cad2', {
-      nome
-    });
+    console.log(Av)
 
+    
+    alert('Avaliacao feita.');
+
+    navigation.navigate('Desenvolvimento');
 
   }
 
@@ -50,72 +50,54 @@ function Cadastro({  }){
       <View style={styles.input}>
       <TextInput 
               style={styles.inputText}
-              placeholder='Nome Completo'
+              placeholder='Habilidade Tecnica'
               autoCorrect={false}
-              value={nome}
-              onChangeText={(texto) => setNome(texto)}/>
-      </View>
-
-      <View style={styles.input}>
-      <TextInputMask
-      type={'datetime'}
-      options={{
-        format: 'DD/MM/YYYY'
-      }} 
-        style={styles.inputText}
-        placeholder='DD/MM/YYYY'
-        autoCorrect={false}
-        value={data}
-        onChangeText={(texto) => setData(texto)}/>
-      </View>
-
-      <View style={styles.input}>
-          <TextInputMask 
-              style={styles.inputText}
-              type='cpf'
-              placeholder='CPF'
-              autoCorrect={false}
-              value={cpf}
+              value={HabilidadeTecnica}
               keyboardType="numeric"
-              onChangeText={(texto) => setCpf(texto)}/>
+              onChangeText={(texto) => setHabilidadeTecnica(texto)}/>
+      </View>
+
+      <View style={styles.input}>
+      <TextInput 
+        style={styles.inputText}
+        placeholder='Relacionamento interpessoal'
+        autoCorrect={false}
+        keyboardType="numeric"
+        value={RelacionamentoInterpessoal}
+        onChangeText={(texto) => setRelacionamentoInterpessoal(texto)}/>
       </View>
 
       <View style={styles.input}>
           <TextInput 
               style={styles.inputText}
-              placeholder='RG'
+              placeholder='Participação'
               autoCorrect={false}
-              value={rg}
+              value={Participacao}
               keyboardType="numeric"
-              onChangeText={(texto) => setRg(texto)}/>
+              onChangeText={(texto) => setParticipacao(texto)}/>
       </View>
 
       <View style={styles.input}>
-          <TextInputMask 
+          <TextInput 
               style={styles.inputText}
-              type={'cel-phone'}
-              options={{
-                maskType: 'BRL',
-                withDDD: true,
-                dddMask: '(99) '
-              }}
-              placeholder='Telefone'
+              placeholder='Cumprir as metas'
               autoCorrect={false}
-              value={Telefone}
               keyboardType="numeric"
-              onChangeText={(texto) => setTelefone(texto)}/>
+              value={Metas}
+              onChangeText={(texto) => setMetas(texto)}/>
       </View>
+
       
 
       <TouchableOpacity style={styles.btn} onPress={cadastrar}>
-        <Text style={styles.btnTexto}>Proximo</Text>
+        <Text style={styles.btnTexto}>Finalizar</Text>
       </TouchableOpacity>
 
   </KeyboardAvoidingView>
   );
   }
 
-  export default Cadastro;
+  export default Avaliacao2;
 
   const styles = StyleSheet.create({
     HomeScreen:{

@@ -3,11 +3,9 @@ import React, {useState, useEffect} from 'react';
 import app from '../../config';
 import { doc, setDoc, getFirestore, collection, updateDoc  } from "firebase/firestore"; 
 import { useNavigation } from '@react-navigation/native';
-import { MultipleSelectList } from 'react-native-dropdown-select-list'
 
 
-
-function Cad2({ route }){
+function EdiCad2({ route }){
 
   const navigation = useNavigation();
 
@@ -17,14 +15,7 @@ function Cad2({ route }){
   const [periodo, setperiodo] = useState('');
   const [termino, setTermino] = useState('');
 
-  const { nome } = route.params;
-
-  const mod = [
-    {key:'1', value:'CLT'},
-    {key:'2', value:'Estagio'},
-    {key:'3', value:'Jovem aprentiz'},
-    {key:'4', value:'Temporario'},
-  ]
+  const { nomePesquisa } = route.params;
 
 
   async function cadastrar(){
@@ -38,25 +29,25 @@ function Cad2({ route }){
       termino: termino
     }
 
-    const cad = updateDoc(doc(db, "Usuarios", nome), usuarios)
-    console.log(nome)
+    const cad = updateDoc(doc(db, "Usuarios", nomePesquisa), usuarios)
 
-    navigation.navigate('Cad3', {
-      nome
+
+    navigation.navigate('EdiCad3', {
+        nomePesquisa
     });
+    console.log(nomePesquisa)
 
   }
 
   return(
     <KeyboardAvoidingView style={styles.HomeScreen}>
 
-      <View  style={styles.input}>
+      <View style={styles.input}>
       <TextInput 
         style={styles.inputText}
         placeholder='Modelo'
         autoCorrect={false}
         value={modelo}
-        data={mod}
         onChangeText={(texto) => setModelo(texto)}/>
       </View>
 
@@ -65,8 +56,8 @@ function Cad2({ route }){
         style={styles.inputText}
         placeholder='Horas Praticas'
         autoCorrect={false}
-        value={HorasPraticas}
         keyboardType="numeric"
+        value={HorasPraticas}
         onChangeText={(texto) => setHorasPraticas(texto)}/>
       </View>
 
@@ -75,8 +66,8 @@ function Cad2({ route }){
             style={styles.inputText}
             placeholder='Horas Teoricas'
             autoCorrect={false}
-            value={HorasTeoricas}
             keyboardType="numeric"
+            value={HorasTeoricas}
             onChangeText={(texto) => setHorasTeoricas(texto)}/>
       </View>
 
@@ -107,7 +98,7 @@ function Cad2({ route }){
     );
   }
 
-  export default Cad2;
+  export default EdiCad2;
 
   const styles = StyleSheet.create({
     HomeScreen:{

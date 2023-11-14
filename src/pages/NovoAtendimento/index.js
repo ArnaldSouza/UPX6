@@ -1,35 +1,70 @@
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Image,TouchableOpacity, ScrollView} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import app from '../../config';
+import { doc, setDoc, getFirestore, updateDoc, addDoc, useFirestore, collection   } from "firebase/firestore";
+
 
 function NovoAtendimento({ navigation }){
-    return(
-      <KeyboardAvoidingView style={styles.HomeScreen}>
+
+  const [nome, setNome] = useState('');
+  const [motivo, setMotivo] = useState('');
+  const [descricao, setDescricao] = useState('');
+
+  async function cadastrar(){
+
+    const db = getFirestore(app);
+
+    const aten = {
+      motivo: motivo,
+      descricao: descricao
+    }
+
+  const cad = addDoc(collection(db, "Usuarios", nome, "Atendimento"), aten)
+
+
   
-        <View style={styles.input}>
-        <TextInput 
-                style={styles.inputText}
-                placeholder='Motivo'
-                autoCorrect={false}
-                onChangeText={()=> {}}/>
-        </View>
+  console.log(aten)
 
-        <View style={styles.inputdes}>
-            <TextInput 
-                style={styles.inputText}
-                placeholder='Descricao'
-                autoCorrect={false}
-                onChangeText={()=> {}}/>
-        </View>
+  }
+
+  return(
+    <KeyboardAvoidingView style={styles.HomeScreen}>
+
+    <View style={styles.input}>
+      <TextInput 
+        style={styles.inputText}
+        placeholder='Nome do colaboarador'
+        autoCorrect={false}
+        value={nome}
+        onChangeText={(texto) => setNome(texto)}/>
+    </View>
+
+    <View style={styles.input}>
+    <TextInput 
+      style={styles.inputText}
+      placeholder='Motivo'
+      autoCorrect={false}
+      onChangeText={(texto) => setMotivo(texto)}/>
+    </View>
+
+    <View style={styles.inputdes}>
+      <TextInput 
+      style={styles.inputText}
+      placeholder='Descricao'
+      autoCorrect={false}
+      onChangeText={(texto) => setDescricao(texto)}/>
+    </View>
 
 
 
-        
+    
 
-        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Cad2')}>
-          <Text style={styles.btnTexto}>Enviar</Text>
-        </TouchableOpacity>
+    <TouchableOpacity style={styles.btn} onPress={cadastrar}>
+      <Text style={styles.btnTexto}>Enviar</Text>
+    </TouchableOpacity>
 
-    </KeyboardAvoidingView>
-    );
+  </KeyboardAvoidingView>
+  );
   }
 
   export default NovoAtendimento;
@@ -53,6 +88,7 @@ function NovoAtendimento({ navigation }){
 
       inputText:{
         marginStart: '5%',
+        
       },
 
       inputdes:{

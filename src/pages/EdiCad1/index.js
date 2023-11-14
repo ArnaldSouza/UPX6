@@ -1,59 +1,58 @@
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Image,TouchableOpacity, ScrollView} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import app from '../../config';
-import { doc, setDoc, getFirestore, updateDoc, addDoc, useFirestore, collection   } from "firebase/firestore";
+import { doc, setDoc, getFirestore, collection, updateDoc } from "firebase/firestore"; 
+import { useNavigation } from '@react-navigation/native';
 import { TextInputMask } from 'react-native-masked-text'
 
+function EdiCad1({ route}){
 
-
-function NovaMedida({ navigation }){
+  const navigation = useNavigation();
 
   const [nome, setNome] = useState('');
-  const [motivo, setMotivo] = useState('');
   const [data, setData] = useState('');
-  const [medida, setMedida] = useState('');
-  const [descricao, setDescricao] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [rg, setRg] = useState('');
+  const [Telefone, setTelefone] = useState('');
 
   
+console.log(route.params.id);
 
   async function cadastrar(){
 
+    const { id } = route.params;
+    
     const db = getFirestore(app);
-
-    const med = {
-      motivo: motivo,
+    const usuarios = {
+      nome: nome,
       data: data,
-      medida: medida,
-      descricao: descricao
+      cpf: cpf,
+      rg: rg,
+      Telefone: Telefone
     }
 
-  const cad = addDoc(collection(db, "Usuarios", nome, "Medidas"), med)
+    const cad = updateDoc(doc(db, "Usuarios", id), usuarios,)
 
+    const volta = navigation.navigate('GerenciamentoCadastro');
+    navigation.navigate('EdiCad2', {
+      id
+      });
+      console.log(id)
 
-  
-  console.log(med)
 
   }
-  
+
   return(
+
     <KeyboardAvoidingView style={styles.HomeScreen}>
 
       <View style={styles.input}>
       <TextInput 
               style={styles.inputText}
-              placeholder='Nome do colaboarador'
+              placeholder='Nome Completo'
               autoCorrect={false}
               value={nome}
               onChangeText={(texto) => setNome(texto)}/>
-      </View>
-
-      <View style={styles.input}>
-      <TextInput 
-              style={styles.inputText}
-              placeholder='Motivo'
-              autoCorrect={false}
-              value={motivo}
-              onChangeText={(texto) => setMotivo(texto)}/>
       </View>
 
       <View style={styles.input}>
@@ -70,36 +69,52 @@ function NovaMedida({ navigation }){
       </View>
 
       <View style={styles.input}>
-          <TextInput 
+          <TextInputMask 
               style={styles.inputText}
-              placeholder='Medida'
+              type='cpf'
+              placeholder='CPF'
               autoCorrect={false}
-              value={medida}
-              onChangeText={(texto) => setMedida(texto)}/>
+              value={cpf}
+              keyboardType="numeric"
+              onChangeText={(texto) => setCpf(texto)}/>
       </View>
 
-      <View style={styles.inputdes}>
+      <View style={styles.input}>
           <TextInput 
               style={styles.inputText}
-              placeholder='Descricao'
+              placeholder='RG'
               autoCorrect={false}
-              value={descricao}
-              onChangeText={(texto) => setDescricao(texto)}/>
+              value={rg}
+              keyboardType="numeric"
+              onChangeText={(texto) => setRg(texto)}/>
       </View>
 
-
-
+      <View style={styles.input}>
+          <TextInputMask 
+              style={styles.inputText}
+              type={'cel-phone'}
+              options={{
+                maskType: 'BRL',
+                withDDD: true,
+                dddMask: '(99) '
+              }}
+              placeholder='Telefone'
+              autoCorrect={false}
+              value={Telefone}
+              keyboardType="numeric"
+              onChangeText={(texto) => setTelefone(texto)}/>
+      </View>
       
 
       <TouchableOpacity style={styles.btn} onPress={cadastrar}>
-        <Text style={styles.btnTexto}>Enviar</Text>
+        <Text style={styles.btnTexto}>Proximo</Text>
       </TouchableOpacity>
 
   </KeyboardAvoidingView>
-    );
+  );
   }
 
-  export default NovaMedida;
+  export default EdiCad1;
 
   const styles = StyleSheet.create({
     HomeScreen:{
@@ -122,21 +137,14 @@ function NovaMedida({ navigation }){
         marginStart: '5%',
       },
 
-      inputdes:{
-        height: '24.28%',
-        width: '76.8%',
-        borderStyle: 'solid',
-        borderWidth: 1,
-      },
-
       btn:{
-        width: '55%',
+        width: '39%',
         height: '7%',
         alignItems: 'center',
         justifyContent: 'space-evenly',
         backgroundColor: '#99CC6A',
+        alignSelf: 'flex-end',
         marginEnd: '6%',
-        borderRadius: 30
       },
 
       btnTexto:{

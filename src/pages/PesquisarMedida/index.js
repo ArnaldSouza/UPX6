@@ -1,43 +1,22 @@
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Image,TouchableOpacity, ScrollView, FlatList} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import app from '../../config';
-import { doc, setDoc, getFirestore, getDocs , updateDoc, collection, getDoc  } from "firebase/firestore"; 
+import { doc, setDoc, getFirestore, getDocs , updateDoc, collection, get  } from "firebase/firestore"; 
 
-function ConsultarMedida({ navigation }){
+function Pesquisa({ navigation }){
 
   const db = getFirestore(app);
   const [nomePesquisa, setnomePesquisa] = useState('');
-  const [data, setData] = useState([]);
-
-  const renderItem = ({ item }) => (
-    <View style={styles.Atendimento}>
-      
-
-      <Text style={{ color: '#FFF',paddingRight: 5,  }}>Motivo: {item.motivo}</Text>
-      <Text style={{color: '#FFF', paddingRight: 10, paddingTop: 10}}>Descricao: {item.descricao}</Text>
-      
-    </View>
-    
-  );
 
   async function Pesquisar(){
 
-    //const querySnapshot = await getDocs(collection(db, "Usuarios", nomePesquisa, "Medidas"));
-    setData([]);
-    const Aux = [];
-    const querySnapshot  = await getDocs(collection(db, "Usuarios", nomePesquisa, "Atendimento"));
-    
-    querySnapshot.forEach((doc) =>{
-      Aux.push({
-        id: doc.data().id,
-        descricao: doc.data().descricao,
-        motivo: doc.data().motivo
-      })});
-    
-    setData(Aux);  
+    const querySnapshot = await getDocs(collection(db, "Usuarios", nomePesquisa, "Medidas"));
+    querySnapshot.forEach((doc)  => {
+        console.log(doc.id, "=>", doc.data());
+    });
 
-    console.log(Aux)
 
+    console.log(nomePesquisa)
   }
     return(
     <KeyboardAvoidingView style={styles.HomeScreen}>
@@ -51,37 +30,31 @@ function ConsultarMedida({ navigation }){
 
         
         </View>
-        
-        <View>
         <TouchableOpacity style={styles.btn} onPress={Pesquisar}>
         <Text style={styles.btnTexto}>Pesquisar</Text>
         </TouchableOpacity>
+        <View>
             <FlatList
-               data={data}
-               renderItem={renderItem}
+               
             />
         </View>
     </KeyboardAvoidingView>
     );
   }
 
-  export default ConsultarMedida;
+  export default Pesquisa;
 
-  
+  class MedidaItem extends Comment{
+    render(){
+      return(
+        <View>
+          
+        </View>
+      );
+    }
+  }
 
   const styles = StyleSheet.create({
-
-      Atendimento:{
-        flex:1,
-        flexDirection: 'column',
-        backgroundColor: '#314FBA',
-        alignItems: 'flex-start ',
-        marginBottom: 10,
-        justifyContent: 'flex-start',
-        padding: 10,
-        borderRadius: 4,
-      },
-    
     HomeScreen:{
         flex: 1,
         alignItems: 'center',
@@ -104,16 +77,13 @@ function ConsultarMedida({ navigation }){
     },
 
     btn:{
-      width: 150,
+      width: '39%',
       height: '7%',
       alignItems: 'center',
       justifyContent: 'space-evenly',
       backgroundColor: '#99CC6A',
       alignSelf: 'flex-end',
       marginEnd: '6%',
-      borderRadius: 15,
-      marginTop: "8%",
-      marginBottom: "4%"
     },
 
     btnTexto:{

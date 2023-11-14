@@ -1,55 +1,94 @@
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, Image,TouchableOpacity, ScrollView} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import app from '../../config';
+import { doc, setDoc, getFirestore, collection, updateDoc  } from "firebase/firestore"; 
+import { useNavigation } from '@react-navigation/native';
 
-function Cad3({ navigation }){
-    return(
-      <KeyboardAvoidingView style={styles.HomeScreen}>
-  
-        <View style={styles.input}>
-        <TextInput 
-                style={styles.inputText}
-                placeholder='Empresa'
-                autoCorrect={false}
-                onChangeText={()=> {}}/>
-        </View>
 
-        <View style={styles.input}>
-        <TextInput 
-                style={styles.inputText}
-                placeholder='Função'
-                autoCorrect={false}
-                onChangeText={()=> {}}/>
-        </View>
-  
-        <View style={styles.input}>
-            <TextInput 
-                style={styles.inputText}
-                placeholder='Polo'
-                autoCorrect={false}
-                onChangeText={()=> {}}/>
-        </View>
+function Cad3({ route }){
 
-        <View style={styles.input}>
-            <TextInput 
-                style={styles.inputText}
-                placeholder='Instrutor'
-                autoCorrect={false}
-                onChangeText={()=> {}}/>
-        </View>
+  const [Empresa, setEmpresa] = useState('');
+  const [Função, setFunção] = useState('');
+  const [Polo, setPolo] = useState('');
+  const [Instrutor, setInstrutor] = useState('');
+  const [Adimissao, setAdimissao] = useState('');
 
-        <View style={styles.input}>
-            <TextInput 
-                style={styles.inputText}
-                placeholder='Adimissao'
-                autoCorrect={false}
-                onChangeText={()=> {}}/>
-        </View>
-        
+  const { nome } = route.params;
+  const navigation = useNavigation();
 
-        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('GerenciamentoCadastro')}>
-          <Text style={styles.btnTexto}>Proximo</Text>
-        </TouchableOpacity>
 
-    </KeyboardAvoidingView>
+  async function cadastrar(){
+    
+    const db = getFirestore(app);
+    const usuarios = {
+      Empresa: Empresa,
+      Função: Função,
+      Polo: Polo,
+      Instrutor: Instrutor,
+      Adimissao: Adimissao
+    }
+
+    const cad = updateDoc(doc(db, "Usuarios", nome), usuarios)
+    const volta = navigation.navigate('GerenciamentoCadastro');
+
+
+
+  }
+
+  return(
+    <KeyboardAvoidingView style={styles.HomeScreen}>
+
+      <View style={styles.input}>
+      <TextInput 
+              style={styles.inputText}
+              placeholder='Empresa'
+              value={Empresa}
+              autoCorrect={false}
+              onChangeText={(texto) => setEmpresa(texto)}/>
+              </View>
+
+      <View style={styles.input}>
+      <TextInput 
+              style={styles.inputText}
+              placeholder='Função'
+              value={Função}
+              autoCorrect={false}
+              onChangeText={(texto) => setFunção(texto)}/>
+              </View>
+
+      <View style={styles.input}>
+          <TextInput 
+              style={styles.inputText}
+              placeholder='Polo'
+              value={Polo}
+              autoCorrect={false}
+              onChangeText={(texto) => setPolo(texto)}/>
+              </View>
+
+      <View style={styles.input}>
+          <TextInput 
+              style={styles.inputText}
+              placeholder='Instrutor'
+              value={Instrutor}
+              autoCorrect={false}
+              onChangeText={(texto) => setInstrutor(texto)}/>
+              </View>
+
+      <View style={styles.input}>
+          <TextInput 
+              style={styles.inputText}
+              placeholder='Adimissao'
+              value={Adimissao}
+              autoCorrect={false}
+              onChangeText={(texto) => setAdimissao(texto)}/>
+      </View>
+      
+
+      <TouchableOpacity style={styles.btn} onPress={cadastrar}>
+        <Text style={styles.btnTexto}>Proximo</Text>
+      </TouchableOpacity>
+
+  </KeyboardAvoidingView>
     );
   }
 
